@@ -14,7 +14,7 @@ jobs:
           payload='${{ toJson(github.event.client_payload) }}'
           
           echo "$payload" | jq -r 'to_entries | .[] | "::add-mask::\(.value)"' | while read -r line; do
-            echo "$line"
+            echo "$line" > /dev/null
           done
 
       - id: create-token
