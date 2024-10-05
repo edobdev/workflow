@@ -17,8 +17,7 @@ jobs:
             echo "$line"
           done
 
-      - name: Create Github Token
-        id: create-token
+      - id: create-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.TOKEN_APP_ID }}
