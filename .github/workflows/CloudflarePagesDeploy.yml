@@ -22,12 +22,12 @@ jobs:
         with:
           app-id: ${{ vars.TOKEN_APP_ID }}
           private-key: ${{ secrets.TOKEN_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
+          owner: ${{ github.event.client_payload.owner }}
 
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          repository: '${{ github.event.client_payload.owner }}/${{ github.event.client_payload.repository }}'
+          repository: '${{ github.event.client_payload.owner }}/${{ github.event.client_payload.repo }}'
           token: ${{ steps.create-token.outputs.token }}
 
       - name: Install dependencies
