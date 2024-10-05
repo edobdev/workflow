@@ -1,0 +1,36 @@
+name: Cloudflare Pages Deploy
+
+on:
+  repository_dispatch:
+    types: [CloudflarePagesDeploy]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Mask all payload values
+        run: |
+          payload='${{ toJson(github.event.client_payload) }}'
+          
+          echo "$payload" | jq -r 'to_entries | .[] | "::add-mask::\(.value)"' | while read -r line; do
+            echo "$line"
+          done
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          repository: '${{ github.event.client_payload.repository }}'
+          token: ${{ secrets.ORG_EDOB }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_API }}
+          command: pages deploy ${{ github.event.client_payload.build }} --project-name=${{ github.event.client_payload.project }}
