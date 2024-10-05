@@ -28,7 +28,6 @@ jobs:
         with:
           repository: '${{ github.event.client_payload.repository }}'
           token: ${{ steps.create-token.outputs.token }}
-          ref: ${{ github.head_ref }}
           persist-credentials: false
 
       - name: Install dependencies
