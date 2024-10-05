@@ -10,12 +10,11 @@ jobs:
     name: Deploy
     steps:
       - name: Mask all payload values
+        env:
+          CLIENT_PAYLOAD: '${{ toJson(github.event.client_payload) }}'
         run: |
-          payload='${{ toJson(github.event.client_payload) }}'
-          
-          echo "$payload" | jq -r 'to_entries | .[] | "::add-mask::\(.value)"' | while read -r line; do
-            # Only apply mask without printing the values
-            echo "::add-mask::${line}" > /dev/null
+          echo "$CLIENT_PAYLOAD" | jq -r 'to_entries | .[] | "::add-mask::\(.value)"' | while read -r line; do
+            echo "$line" > /dev/null
           done
 
       - id: create-token
