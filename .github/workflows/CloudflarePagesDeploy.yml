@@ -33,3 +33,5 @@ jobs:
 
       - name: Deploy to Cloudflare
         run: npx --yes wrangler pages deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_API }}
